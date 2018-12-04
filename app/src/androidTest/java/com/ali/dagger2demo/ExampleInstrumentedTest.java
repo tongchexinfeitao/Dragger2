@@ -1,4 +1,4 @@
-package com.ali.dragger2demo;
+package com.ali.dagger2demo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

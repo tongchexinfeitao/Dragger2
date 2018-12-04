@@ -1,6 +1,10 @@
-package com.ali.dragger2demo;
+package com.ali.dagger2demo.app;
 
 import android.app.Application;
+
+import com.ali.dagger2demo.di.component.AppComponent;
+import com.ali.dagger2demo.di.component.DaggerAppComponent;
+import com.ali.dagger2demo.di.module.AppModule;
 
 /**
  * Created by mumu on 2018/12/3.

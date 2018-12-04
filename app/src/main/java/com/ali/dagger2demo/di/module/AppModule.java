@@ -1,6 +1,10 @@
-package com.ali.dragger2demo;
+package com.ali.dagger2demo.di.module;
 
 import android.content.Context;
+
+import com.ali.dagger2demo.app.App;
+import com.ali.dagger2demo.mvp.model.bean.UserBean;
+import com.ali.dagger2demo.di.scope.PerApp;
 
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +31,7 @@ public class AppModule {
     }
 
     @Provides
+    @PerApp
     OkHttpClient provideOkHttpClient() {
         return new OkHttpClient.Builder()
                 .readTimeout(5000, TimeUnit.SECONDS)
@@ -34,6 +39,7 @@ public class AppModule {
     }
 
     @Provides
+    @PerApp
     UserBean provideUserBean() {
         String name = app.getSharedPreferences("user_sp", Context.MODE_PRIVATE)
                 .getString("name", null);
@@ -42,6 +48,4 @@ public class AppModule {
         userBean = new UserBean(name, userId);
         return userBean;
     }
-
-
 }

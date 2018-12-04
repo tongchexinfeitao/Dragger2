@@ -1,4 +1,4 @@
-package com.ali.dragger2demo;
+package com.ali.dagger2demo.mvp.model.bean;
 
 /**
  * Created by mumu on 2018/12/3.
@@ -6,9 +6,10 @@ package com.ali.dragger2demo;
 
 public class Car {
 
-    Engine engine;
+    public Engine engine;
 
     public Car(Engine engine) {
         this.engine = engine;
     }
+
 }

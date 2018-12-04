@@ -1,4 +1,10 @@
-package com.ali.dragger2demo;
+package com.ali.dagger2demo.di.module;
+
+import com.ali.dagger2demo.mvp.model.bean.Car;
+import com.ali.dagger2demo.mvp.model.bean.Engine;
+import com.ali.dagger2demo.di.qualifier.EngineL;
+import com.ali.dagger2demo.di.qualifier.EngineT;
+import com.ali.dagger2demo.di.scope.PerMainActivity;
 
 import dagger.Module;
 import dagger.Provides;
@@ -11,18 +17,21 @@ import dagger.Provides;
 public class MakeCarModule {
 
     @Provides
-    Car provideCar(Engine engine) {
+    @PerMainActivity
+    Car provideCar(@EngineT Engine engine) {
         return new Car(engine);
     }
 
 
     @Provides
+    @EngineL
     Engine provideEngine() {
         return new Engine("1.6L");
     }
 
 
     @Provides
+    @EngineT
     Engine provideEngine2() {
         return new Engine("1.5T");
     }
