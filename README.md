@@ -31,7 +31,7 @@ public class Engine {
 }
 
 @Module     
- 用于标注提供依赖的类。你可能会有点困惑，上面不是提到用@Inject标记构造函数就可以提供依赖了么，为什么还需要@Module？很多时候我们需要提供依赖的构造函数是第三方库的，我们没法给它加上@Inject注解，又比如说提供依赖的构造函数是带参数的，如果我们之所简单的使用@Inject标记它，那么他的参数又怎么来呢？@Module正是帮我们解决这些问题的。
+   用于标注提供依赖的类。你可能会有点困惑，上面不是提到用@Inject标记构造函数就可以提供依赖了么，为什么还需要@Module？很多时候我们需要提供依赖的构造函数是第三方库的，我们没法给它加上@Inject注解，又比如说提供依赖的构造函数是带参数的，如果我们之所简单的使用@Inject标记它，那么他的参数又怎么来呢？@Module正是帮我们解决这些问题的。
 
 @Component  
   	用于修饰注入组件
@@ -42,7 +42,7 @@ public interface MakeCarComponent {
 }
 
   @Qulifier
-@Qulifier用于自定义注解，也就是说@Qulifier就如同Java提供的几种基本元注解一样用来标记注解类。我们在使用@Module来标注提供依赖的方法时，方法名我们是可以随便定义的（虽然我们定义方法名一般以provide开头，但这并不是强制的，只是为了增加可读性而已）。那么Dagger2怎么知道这个方法是为谁提供依赖呢？答案就是返回值的类型，Dagger2根据返回值的类型来决定为哪个被@Inject标记了的变量赋值。但是问题来了，一旦有多个一样的返回类型Dagger2就懵逼了。@Qulifier的存在正式为了解决这个问题，我们使用@Qulifier来定义自己的注解，然后通过自定义的注解去标注提供依赖的方法和依赖需求方（也就是被@Inject标注的变量），这样Dagger2就知道为谁提供依赖了。----一个更为精简的定义：当类型不足以鉴别一个依赖的时候，我们就可以使用这个注解标示；
+     @Qulifier用于自定义注解，也就是说@Qulifier就如同Java提供的几种基本元注解一样用来标记注解类。我们在使用@Module来标注提供依赖的方法时，方法名我们是可以随便定义的（虽然我们定义方法名一般以provide开头，但这并不是强制的，只是为了增加可读性而已）。那么Dagger2怎么知道这个方法是为谁提供依赖呢？答案就是返回值的类型，Dagger2根据返回值的类型来决定为哪个被@Inject标记了的变量赋值。但是问题来了，一旦有多个一样的返回类型Dagger2就懵逼了。@Qulifier的存在正式为了解决这个问题，我们使用@Qulifier来定义自己的注解，然后通过自定义的注解去标注提供依赖的方法和依赖需求方（也就是被@Inject标注的变量），这样Dagger2就知道为谁提供依赖了。----一个更为精简的定义：当类型不足以鉴别一个依赖的时候，我们就可以使用这个注解标示；
 
 @Scope
 @Scope同样用于自定义注解，我能可以通过@Scope自定义的注解来限定注解作用域，实现局部的单例；
@@ -52,16 +52,16 @@ public interface MakeCarComponent {
 
 用法ps:
 1、Component的接口，必须写一个无返回值的方法，方法参数必须为要注入到的类
-如  void inject（MainActivity mainActivity）
+   如  void inject（MainActivity mainActivity）
 
 2、dependencies的用法 （这也是dependencies和）
-component中如果作为父类，必须在component接口中显式的声明，要为子类提供的依赖
+   component中如果作为父类，必须在component接口中显式的声明，要为子类提供的依赖
 如： AppModule中有    Context  providerContext（）方法
 那么AppComponent中必须有 Context  providerContext（）方法
 这样通过dependencies 依赖AppConponent来实现的子Component类才能获取到 AppComponent中提供的依赖
 
 3、@Qualifier 限定符注解的用法
-当module中有多个方法，都返回同一个类型的对象的时候，需要使用Qualifier注解自定义的注解加以区分
+    当module中有多个方法，都返回同一个类型的对象的时候，需要使用Qualifier注解自定义的注解加以区分
 比如 :
 一、首先自定义注解
 @Qualifier
@@ -130,13 +130,13 @@ void  inject (ManActiivty mainActiivty)
 ps：这个注解PerAcitiivty 和 PerApp没有自己的实际意义；他是在对应的Component中保持唯一的；所以PerApp修饰的依赖想要保持全局唯一，只能让AppComponent保持全局唯一，同时使用PerApp修饰
 
 源码解析：
- 	Dagger会自动生成一个 DaggerXxxxxComponent这样一个Component接口子类，在该类的inject方法中，进行了依赖注入；且该类的成员变量都是Module中对应提供依赖类型的工厂类Provider<T>
+   	Dagger会自动生成一个 DaggerXxxxxComponent这样一个Component接口子类，在该类的inject方法中，进行了依赖注入；且该类的成员变量都是Module中对应提供依赖类型的工厂类Provider<T>
 一个Module中的一个被@Provider修饰的方法返回T类型，自动生成了一个唯一和他对应的Factory<T>类或者Provider<T>类；这种类有一个get方法可以返回T
 一个使用依赖注入的类，如MainActiivty，他对应生成一个 MainActiivty_MembesInjector类，其中每一个被@Inject修饰的对象T，对应MainActiivty_MembesInjector中的一个 
 injectT(MainActiivty instance ， T t )j静态方法；用来将 T 对象注入到MainActivity中对应的对象；
 ps：
-提供依赖的是Provider<T>或者Factory<T> , 注入操作的是MainActiivty_MembesInjector中对应的injectT（）方法
- 工厂类Factory<T>中的T对象，其实真正源自Module中的 @Provider修饰的  T  getT（）；方法，工厂类只不过是过了一个非空判断，如果为null，直接抛出非常状态依赖，如果不为null，直接返回；
+    提供依赖的是Provider<T>或者Factory<T> , 注入操作的是MainActiivty_MembesInjector中对应的injectT（）方法
+工厂类Factory<T>中的T对象，其实真正源自Module中的 @Provider修饰的  T  getT（）；方法，工厂类只不过是过了一个非空判断，如果为null，直接抛出非常状态依赖，如果不为null，直接返回；
 
 
 
