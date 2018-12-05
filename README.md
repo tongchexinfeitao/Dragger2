@@ -8,10 +8,8 @@ ps：Sample展示了 依赖的方式和集成的方式：
 AppComponent和MakeCarDependeciesComponent 展示的是依赖关系
 
 添加依赖
-dependencies {
-  compile 'com.google.dagger:dagger:2.+'
-  annotationProcessor 'com.google.dagger:dagger-compiler:2.+'
-}
+    implementation 'com.google.dagger:dagger:2.+'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.+'
 
 基本用法：
 @Inject
