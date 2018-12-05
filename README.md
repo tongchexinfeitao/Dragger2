@@ -8,8 +8,10 @@ ps：Sample展示了 依赖的方式和集成的方式：
 AppComponent和MakeCarDependeciesComponent 展示的是依赖关系
 
 添加依赖
-    implementation 'com.google.dagger:dagger:2.+'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.+'
+dependencies {
+  compile 'com.google.dagger:dagger:2.+'
+  annotationProcessor 'com.google.dagger:dagger-compiler:2.+'
+}
 
 基本用法：
 @Inject
@@ -46,12 +48,13 @@ public interface MakeCarComponent {
 @Scope
 @Scope同样用于自定义注解，我能可以通过@Scope自定义的注解来限定注解作用域，实现局部的单例；
 
-@Singleton：@Singleton其实就是一个通过@Scope定义的注解，我们一般通过它来实现全局单例。但实际上它并不能提前全局单例，是否能提供全局单例还要取决于对应的Component是否为一个全局对象。（ps： 和我们自定义的PerApp一个作用）
+@Singleton （其实就是一个Scope自定义的注解，没有实际意义）
+@Singleton其实就是一个通过@Scope定义的注解，我们一般通过它来实现全局单例。但实际上它并不能提前全局单例，是否能提供全局单例还要取决于对应的Component是否为一个全局对象。（ps： 和我们自定义的PerApp一个作用）
 
 
 用法ps:
 1、Component的接口，必须写一个无返回值的方法，方法参数必须为要注入到的类
-如  void inject（MainActivity mainActivity）
+ 如： void inject（MainActivity mainActivity）
 
 2、dependencies的用法 （这也是dependencies和）
 component中如果作为父类，必须在component接口中显式的声明，要为子类提供的依赖
@@ -128,23 +131,6 @@ void  inject (ManActiivty mainActiivty)
 如果真正想要实现全局单例，那么这个对象必须声明到AppModule中，然后让AppCompnent保持唯一，再通过Scope自定义一个PerApp注解，用上这个注解；才能真正的保证对象实现全局单例；
 ps：这个注解PerAcitiivty 和 PerApp没有自己的实际意义；他是在对应的Component中保持唯一的；所以PerApp修饰的依赖想要保持全局唯一，只能让AppComponent保持全局唯一，同时使用PerApp修饰
 
-依赖关系
-关于dependencies用法：
-1.没有@scope的component不能依赖有@scope的component
-2.component的dependencies与component自身的@scope不能相同，即组件之间的@scope必须不同
-
-@BindsInstance 注解的用法
-相对于写一个带有构造函数带有参数的 Module，优先使用@BindsInstance方法，@BindInstance注解修饰的方法，相当于Module中的@Provides修饰的方法，都可以提供依赖
-
-@Component
-public interface MainActivityComponent {
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        Builder activity(Activity activity);
-        HomeActivityComponent build();
-    }
-}
 
 源码解析：
  	Dagger会自动生成一个 DaggerXxxxxComponent这样一个Component接口子类，在该类的inject方法中，进行了依赖注入；且该类的成员变量都是Module中对应提供依赖类型的工厂类Provider<T>
@@ -155,7 +141,20 @@ ps：
 提供依赖的是Provider<T>或者Factory<T> , 注入操作的是MainActiivty_MembesInjector中对应的injectT（）方法
  工厂类Factory<T>中的T对象，其实真正源自Module中的 @Provider修饰的  T  getT（）；方法，工厂类只不过是过了一个非空判断，如果为null，直接抛出非常状态依赖，如果不为null，直接返回；
 
-其他用法：
+其他进阶用法：
+@BindsInstance 注解的用法
+相对于写一个带有构造函数带有参数的 Module，优先使用@BindsInstance方法，@BindInstance注解修饰的方法，相当于Module中的@Provides修饰的方法，都可以提供依赖
+
+@Component
+public interface MainActivityComponent {
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        Builder car(Car  car);
+        HomeActivityComponent build();
+    }
+}
+
 Lazy （延迟注入）
 有时我们想注入的依赖在使用时再完成初始化，加快加载速度，就可以使用注入Lazy<T>。只有在调用 Lazy<T> 的 get() 方法时才会初始化依赖实例注入依赖。
 public class Man {
@@ -192,10 +191,14 @@ public class CarFactory {
 Qualifier 限定符用来解决依赖迷失问题，可以依赖实例起个别名用来区分。
 Scope 作用域的本质是 Component 会持有与之绑定的依赖实例的引用，要想确保实例的生命周期，关键在于控制 Component 的生命周期。
 
-
-
 依赖关系：
 使用Dependencies的方式也就是依赖关系
+关于dependencies用法：
+1.没有@scope的component不能依赖有@scope的component
+2.component的dependencies与component自身的@scope不能相同，即组件之间的@scope必须不同
+
+用法：
+第一、在父component中必须显示声明可供子类使用的依赖，子类才可以使用这些依赖
 @Component(modules = {AppModule.class})
 public interface AppComponent {
     //在父component中必须显示声明，子类才可以使用这些依赖
@@ -204,6 +207,7 @@ public interface AppComponent {
     UserBean provideUserBean();
 }
 
+第二、子Componnet中必须使用dependencies 属性
 @Component(modules = {MakeCarModule.class}, dependencies = {AppComponent.class})
 @PerMainActivity
 public interface MakeCarComponent {
@@ -214,7 +218,7 @@ public interface MakeCarComponent {
 
 继承关系：
 安卓中推荐使用SubConmponents的方式也就是继承关系
-
+用法：
 一、父Component的Mudule类中需要声明子Component
 @Module(subcomponents = SonComponent.class)
 public class CarModule {
@@ -252,6 +256,7 @@ ManComponent parentComponent = DaggerManComponent.builder()
 SonComponent sonComponent = parentComponent .sonComponent()
     .build();
 sonComponent.inject(son);
+
 
 依赖关系 vs 继承关系
 相同点：
