@@ -13,6 +13,7 @@ import com.ali.dagger2demo.di.module.AppModule;
 
 public class App extends Application {
 
+
     private static AppComponent appComponent;
 
     @Override
@@ -23,6 +24,7 @@ public class App extends Application {
                 .build();
     }
 
+    //提供一个全局唯一的AppComponent给外部使用
     public static AppComponent getAppComponent() {
         return appComponent;
     }

@@ -1,18 +1,20 @@
 package com.ali.dagger2demo.mvp.view.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Toast;
 
-import com.ali.dagger2demo.app.App;
 import com.ali.dagger2demo.R;
+import com.ali.dagger2demo.app.App;
 import com.ali.dagger2demo.di.component.DaggerMakeCarComponent;
-import com.ali.dagger2demo.mvp.model.bean.Engine;
-import com.ali.dagger2demo.mvp.model.bean.UserBean;
-import com.ali.dagger2demo.di.component.MakeCarComponent;
+import com.ali.dagger2demo.di.component.MakeCarDependeciesComponent;
 import com.ali.dagger2demo.di.module.MakeCarModule;
 import com.ali.dagger2demo.mvp.model.bean.Car;
+import com.ali.dagger2demo.mvp.model.bean.UserBean;
+
 
 import java.io.IOException;
 
@@ -23,7 +25,9 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
+/***
+ * 依赖关系的需要注入的类
+ */
 public class MainActivity extends AppCompatActivity {
     //告诉dagger我需要注入一个car；  使用依赖的地方
 
@@ -38,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     OkHttpClient okHttpClient;
     @Inject
     UserBean userBean;
-    private MakeCarComponent makeCarComponent;
+    private MakeCarDependeciesComponent makeCarComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,4 +84,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void startSecond(View view) {
+        startActivity(new Intent(this,SecondActivity.class));
+    }
 }
