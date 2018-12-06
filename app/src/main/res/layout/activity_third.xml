@@ -4,11 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ali.dagger2demo.mvp.view.activity.SecondActivity">
+    tools:context="com.ali.dagger2demo.mvp.view.activity.ThirdActivity">
 
-    <TextView
-        android:text="跳转到第三个页面"
-        android:onClick="startThirdActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 </android.support.constraint.ConstraintLayout>

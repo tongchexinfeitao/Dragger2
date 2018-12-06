@@ -1,12 +1,11 @@
 package com.ali.dagger2demo.di.module;
 
 import com.ali.dagger2demo.di.component.MySubComponent;
-
-import java.util.concurrent.TimeUnit;
+import com.ali.dagger2demo.mvp.model.bean.Car;
+import com.ali.dagger2demo.mvp.model.bean.Engine;
 
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.OkHttpClient;
 
 /**
  * Created by mumu on 2018/12/3.
@@ -15,9 +14,7 @@ import okhttp3.OkHttpClient;
 @Module(subcomponents = MySubComponent.class)
 public class MyParentModule {
     @Provides
-    OkHttpClient provideOkHttpClient() {
-        return new OkHttpClient.Builder()
-                .readTimeout(5000, TimeUnit.SECONDS)
-                .build();
+    Car provideCar() {
+        return new Car(new Engine("2.0T"));
     }
 }
