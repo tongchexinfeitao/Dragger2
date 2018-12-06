@@ -14,7 +14,7 @@ import dagger.Component;
 //使用componengt修饰的接口， 可以看做是连接需要依赖和提供依赖的中间件
 @Component(modules = {MakeCarModule.class}, dependencies = {AppComponent.class})
 @PerMainActivity
-public interface MakeCarDependeciesComponent {
+public interface MakeCarComponent {
     void inject(MainActivity mainActivity);    //必须要声明方要注入的方向
 
 }

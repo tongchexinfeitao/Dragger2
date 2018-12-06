@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.ali.dagger2demo.R;
-import com.ali.dagger2demo.di.component.DaggerParentComponnet;
+import com.ali.dagger2demo.di.component.DaggerMyParentComponnet;
 import com.ali.dagger2demo.di.component.MyParentComponnet;
 import com.ali.dagger2demo.di.component.MySubComponent;
 import com.ali.dagger2demo.di.module.MyParentModule;
@@ -28,9 +28,9 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
         //继承关系，通过父Componnet来拿子Componnet
-        MyParentComponnet parentComponnet = DaggerParentComponnet
+        MyParentComponnet parentComponnet = DaggerMyParentComponnet
                 .builder()
-                .parentModule(new MyParentModule())
+                .myParentModule(new MyParentModule())
                 .build();
         MySubComponent mySubComponent = parentComponnet
                 .subComponent()

@@ -10,11 +10,10 @@ import android.widget.Toast;
 import com.ali.dagger2demo.R;
 import com.ali.dagger2demo.app.App;
 import com.ali.dagger2demo.di.component.DaggerMakeCarComponent;
-import com.ali.dagger2demo.di.component.MakeCarDependeciesComponent;
+import com.ali.dagger2demo.di.component.MakeCarComponent;
 import com.ali.dagger2demo.di.module.MakeCarModule;
 import com.ali.dagger2demo.mvp.model.bean.Car;
 import com.ali.dagger2demo.mvp.model.bean.UserBean;
-
 
 import java.io.IOException;
 
@@ -25,13 +24,12 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
 /***
  * 依赖关系的需要注入的类
  */
 public class MainActivity extends AppCompatActivity {
     //告诉dagger我需要注入一个car；  使用依赖的地方
-
-
     @Inject
     Car car;
     @Inject
@@ -42,14 +40,15 @@ public class MainActivity extends AppCompatActivity {
     OkHttpClient okHttpClient;
     @Inject
     UserBean userBean;
-    private MakeCarDependeciesComponent makeCarComponent;
+    private MakeCarComponent makeCarComponent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //注入依赖
 
+        //注入依赖
         makeCarComponent = DaggerMakeCarComponent.builder()
                 .appComponent(App.getAppComponent())
                 .makeCarModule(new MakeCarModule())
@@ -77,14 +76,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(car==car1){
-            Toast.makeText(this,"car是同一个对象",Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(this,"car不是一个对象",Toast.LENGTH_LONG).show();
+        if (car == car1) {
+            Toast.makeText(this, "car是同一个对象", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "car不是一个对象", Toast.LENGTH_LONG).show();
         }
     }
 
     public void startSecond(View view) {
-        startActivity(new Intent(this,SecondActivity.class));
+        startActivity(new Intent(this, SecondActivity.class));
     }
 }
