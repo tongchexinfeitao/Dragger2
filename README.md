@@ -266,3 +266,13 @@ sonComponent.inject(son);
 依赖关系中被依赖的 Component 必须显式地提供公开依赖实例的接口，而 SubComponent 默认继承 parent Component 的依赖。
 依赖关系会生成两个独立的 DaggerXXComponent 类，而 SubComponent 不会生成 独立的 DaggerXXComponent 类。
 在 Android 开发中，Activity 是 App 运行中组件，Fragment 又是 Activity 一部分，这种组件化思想适合继承关系，所以在 Android 中一般使用 SubComponent。
+
+
+ps:
+针对依赖关系和继承关系怎么配合使用：
+1、@SubComponent注解没有dependencies属性，也就是不能再依赖其他Componnet，但是可以添加数据自己的modules属性，来提供依赖
+2、@Component注解，可以有dependencies属性，也可以有module，可以依赖其他component
+3、@SubComponent注解修饰的Component，也可以当parentComponent，可以继续让其他的被SubComponent修饰的component继承
+4、新建一个component组件，可以自由选择依赖还是继承其他组件，同样的道理不管这个component是依赖还是继承的其他组件，它自己本身，也可以被自由的依赖和继承，只需要按照对应的规范去实现即可
+5、parentModule上的dependencies属性按规范最好用上，但是不用的话，目前没有有发现什么问题
+6、在安卓中， Appcomponent，封装的一般都是单例，这样的话，其他Activitycomponent最好和AppComponent是dependencies关系，然后fragmentComponent最好和ActivityComponent是继承关系， 这只是个人理解，具体使用还要根据实际项目，进行灵活设计
